@@ -7,14 +7,31 @@ on:
 permissions:
   contents: read
 jobs:
-  portable:
+  portable-windows:
+    runs-on: windows-2025
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - name: Build and test
+        run: pwsh ./scripts/package-windows.ps1
+        env:
+          JAVA_TOOL_OPTIONS: -Djava.awt.headless=true
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows-x64
+          path: dist/WeChatScreenshotOrganizer-*
+          if-no-files-found: error
+
+  portable-unix:
+    if: github.ref == 'refs/tags/v1.0.0'
     strategy:
       fail-fast: false
       matrix:
         include:
-          - os: windows-2025
-            script: pwsh ./scripts/package-windows.ps1
-            artifact: windows-x64
           - os: ubuntu-22.04
             script: bash ./scripts/package-unix.sh
             artifact: linux-x64
@@ -44,7 +61,7 @@ jobs:
 
   release:
     if: github.ref == 'refs/tags/v1.0.0'
-    needs: portable
+    needs: [portable-windows, portable-unix]
     runs-on: ubuntu-22.04
     permissions:
       contents: write

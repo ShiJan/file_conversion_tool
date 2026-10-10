@@ -7,7 +7,7 @@
 1. 使用 GitHub 公开仓库 `ShiJan/file_conversion_tool`，确认本地 `origin` 指向该仓库。
 2. 检查仓库内容，确认没有真实聊天截图、个人信息和密钥。`dist/`、`target/` 已被 `.gitignore` 排除。
 3. 运行 `git diff --check` 和 `JAVA_TOOL_OPTIONS=-Djava.awt.headless=true mvn -s scripts/maven-settings.xml -gs scripts/maven-settings.xml test`。
-4. 提交源码与文档并推送 `main`，然后创建并推送指向该提交的 `v1.0.0` 标签。
+4. 提交源码与文档并推送 `main`。主分支只运行 Windows 测试和打包；确认通过后，再创建并推送指向该提交的 `v1.0.0` 标签。
 
 ## 构建与发布
 
