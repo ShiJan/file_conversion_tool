@@ -12,7 +12,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import javax.imageio.ImageIO;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.io.TempDir;
 
 final class LocalOcrTest {
@@ -64,16 +63,14 @@ final class LocalOcrTest {
     }
 
     @Test void readsAChineseNameInANarrowLongCapture() throws Exception {
-        Font font = new Font("SansSerif", Font.BOLD, 28);
-        Assumptions.assumeTrue(font.canDisplayUpTo("张三") == -1, "运行环境缺少中文测试字体");
         copyModel();
         BufferedImage image = new BufferedImage(300, 9000, BufferedImage.TYPE_INT_RGB);
         Graphics2D graphics = image.createGraphics();
         graphics.setColor(Color.WHITE);
         graphics.fillRect(0, 0, 300, 9000);
+        graphics.drawImage(titleFixture("narrow-chinese.png"), 0, 0, null);
         graphics.setColor(Color.BLACK);
-        graphics.setFont(font);
-        graphics.drawString("张三", 125, 51);
+        graphics.setFont(new Font("SansSerif", Font.BOLD, 28));
         graphics.drawString("错误正文", 95, 180);
         graphics.dispose();
         Path screenshot = temp.resolve("chinese-narrow-long.png");
