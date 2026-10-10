@@ -7,6 +7,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import javax.imageio.ImageIO;
@@ -32,9 +33,9 @@ final class LocalOcrTest {
         Graphics2D graphics = image.createGraphics();
         graphics.setColor(Color.WHITE);
         graphics.fillRect(0, 0, 300, 9000);
+        graphics.drawImage(titleFixture("narrow-light.png"), 0, 0, null);
         graphics.setColor(Color.BLACK);
         graphics.setFont(new Font("SansSerif", Font.BOLD, 26));
-        graphics.drawString("ALICE", 108, 37);
         graphics.drawString("WRONG", 105, 180);
         graphics.dispose();
         Path screenshot = temp.resolve("narrow-long.png");
@@ -50,12 +51,9 @@ final class LocalOcrTest {
         Graphics2D graphics = image.createGraphics();
         graphics.setColor(Color.WHITE);
         graphics.fillRect(0, 0, 300, 9000);
-        graphics.setColor(new Color(22, 38, 45));
-        graphics.fillRect(0, 0, 300, 100);
-        graphics.setColor(Color.WHITE);
-        graphics.setFont(new Font("SansSerif", Font.BOLD, 26));
-        graphics.drawString("ALICE", 108, 52);
+        graphics.drawImage(titleFixture("narrow-dark.png"), 0, 0, null);
         graphics.setColor(Color.BLACK);
+        graphics.setFont(new Font("SansSerif", Font.BOLD, 26));
         graphics.drawString("WRONG", 105, 180);
         graphics.dispose();
         Path screenshot = temp.resolve("dark-narrow-long.png");
@@ -88,6 +86,13 @@ final class LocalOcrTest {
         try (var source = getClass().getResourceAsStream("/chi_sim.traineddata")) {
             assertNotNull(source, "便携包必须包含 OCR 模型");
             Files.copy(source, temp.resolve("chi_sim.traineddata"));
+        }
+    }
+
+    private BufferedImage titleFixture(String name) throws Exception {
+        try (InputStream input = getClass().getResourceAsStream("/" + name)) {
+            assertNotNull(input, "缺少固定像素的 OCR 测试标题：" + name);
+            return ImageIO.read(input);
         }
     }
 
