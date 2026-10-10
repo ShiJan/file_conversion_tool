@@ -1,0 +1,13 @@
+target/
+dist/
+*.log
+.DS_Store
+.idea/
+.vscode/
+*.iml
+premium-audit.json
+# Never commit user screenshots or local exports.
+samples/private/
+exports/
+*.zip
+assets/icon.iconset/
